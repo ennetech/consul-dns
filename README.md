@@ -52,10 +52,22 @@ Example config:
 }
 ```
 
-You can also use env variables, look in the config package
+You can also use env variables.
 
 6. Add your bind zone files under a "dns" folder in consul KV, remember to name the sub-keys in fqdn format (eg.: with the dot at the end)
 
+## Docker
+```
+docker run -p 53:53/tcp -p 53:53/udp \
+            -p 4367:4367 \
+            -e CONSUL_HTTP_TOKEN=anonymous \
+            -e CONSUL_HTTP_ADDR=http://127.0.0.1:8500 \
+            -e CONSUL_DNS_ADDR=127.0.0.1:8600 \
+            -e CONSULDNS_DNS_PORT=53 \
+            -e CONSULDNS_HTTP_PORT=4367 \
+            -e CONSULDNS_TSIG_KEY="my-tsig-key" \
+            ennetech/consul-dns
+```
 ## Modules description
 ### QUERY (3 scenarios)
 1. The tld is .consul
