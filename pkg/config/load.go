@@ -34,7 +34,7 @@ func LoadConfiguration(configPath string) (conf ConsulDnsConfig, err error) {
 	}
 
 	// Detect env
-	envOrDefault("CONSUL_HTTP_TOKEN", &conf.ConsulConfig.HttpAddress)
+	envOrDefault("CONSUL_HTTP_TOKEN", &conf.ConsulConfig.AuthToken)
 	envOrDefault("CONSUL_HTTP_ADDR", &conf.ConsulConfig.HttpAddress)
 	envOrDefault("CONSUL_DNS_ADDR", &conf.ConsulConfig.DnsAddress)
 
