@@ -48,7 +48,7 @@ func envOrDefault(key string, target *string) {
 	v := os.Getenv(key)
 	if v != "" {
 		*target = v
-		logger.Info("Detected env variable " + key)
+		logger.Info("Detected env variable " + key + "(" + v + ")")
 	}
 }
 

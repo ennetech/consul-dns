@@ -74,15 +74,15 @@ func (zone *Zone) QueryRR(question dns.Question) []dns.RR {
 				answerRecords = append(answerRecords, rr)
 			}
 			// Cname
-		} else if question.Qtype == dns.TypeA && rr.Header().Rrtype == dns.TypeCNAME {
+		} else if question.Qtype == dns.TypeA && rr.Header().Rrtype == dns.TypeCNAME && question.Name == rr.Header().Name {
 			// TODO: this is broken on so many levels
-			/* if cname, ok := rr.(*dns.CNAME); ok {
+			if cname, ok := rr.(*dns.CNAME); ok {
 				m := new(dns.Msg)
 				m.SetQuestion(cname.Target, dns.TypeA)
 				c := new(dns.Client)
 				mes, _, _ := c.Exchange(m, "8.8.8.8:53")
 				answerRecords = append(answerRecords, mes.Answer...)
-			} */
+			}
 		}
 	}
 	return answerRecords
