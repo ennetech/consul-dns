@@ -9,6 +9,7 @@ import (
 	"github.com/miekg/dns"
 	"strings"
 	"strconv"
+	"sync"
 )
 
 // Repository used for storage
@@ -23,6 +24,8 @@ func Init(c config.ConsulDnsConfig, repo zone.Repository) {
 
 // Simple metric
 var requestCounter int
+
+var updateMux sync.Mutex
 
 func handle(w dns.ResponseWriter, r *dns.Msg) {
 	requestCounter++
@@ -61,6 +64,8 @@ func handle(w dns.ResponseWriter, r *dns.Msg) {
 			}
 		}
 	case dns.OpcodeUpdate:
+		defer updateMux.Unlock()
+		updateMux.Lock()
 		tsig := r.IsTsig()
 		if tsig != nil {
 			logger.Info("UPDATE HAS TSIG ")
