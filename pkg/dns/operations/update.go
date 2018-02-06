@@ -5,7 +5,7 @@ import (
 	"github.com/miekg/dns"
 )
 
-func HandleUpdate(ns dns.RR, z zone.Zone) error {
+func HandleUpdate(ns dns.RR, z *zone.Zone) error {
 	if ns.Header().Class == dns.ClassANY || ns.Header().Class == dns.ClassNONE { // Deletion
 		z.DeleteRR(ns)
 	} else { // Addition

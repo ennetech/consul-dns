@@ -1,6 +1,10 @@
 package dns
 
-import "github.com/miekg/dns"
+import (
+	"github.com/miekg/dns"
+	"strconv"
+	"github.com/ennetech/consul-dns/pkg/logger"
+)
 
 func sendMessage(w dns.ResponseWriter, r *dns.Msg, recordsAnswer []dns.RR, rcode int) dns.Msg {
 	a := new(dns.Msg)
@@ -10,6 +14,7 @@ func sendMessage(w dns.ResponseWriter, r *dns.Msg, recordsAnswer []dns.RR, rcode
 	a.Answer = recordsAnswer
 	a.Rcode = rcode
 	w.WriteMsg(a)
+	logger.Debug(a.String(), "reponse for: "+strconv.Itoa(requestCounter))
 	return *a
 }
 
@@ -27,4 +32,8 @@ func sendNotImplemented(w dns.ResponseWriter, r *dns.Msg) dns.Msg {
 
 func sendRefused(w dns.ResponseWriter, r *dns.Msg) dns.Msg {
 	return sendMessage(w, r, []dns.RR{}, dns.RcodeRefused)
+}
+
+func sendNotAuth(w dns.ResponseWriter, r *dns.Msg) dns.Msg {
+	return sendMessage(w, r, []dns.RR{}, dns.RcodeNotAuth)
 }

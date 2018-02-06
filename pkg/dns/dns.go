@@ -8,6 +8,7 @@ import (
 	"github.com/ennetech/consul-dns/pkg/zone"
 	"github.com/miekg/dns"
 	"strings"
+	"strconv"
 )
 
 // Repository used for storage
@@ -25,6 +26,7 @@ var requestCounter int
 
 func handle(w dns.ResponseWriter, r *dns.Msg) {
 	requestCounter++
+	logger.Debug(r.String(), "incoming query: "+strconv.Itoa(r.Opcode))
 
 	// Hold the records until we process all the pipeline
 	var responseRecords []dns.RR
@@ -67,13 +69,18 @@ func handle(w dns.ResponseWriter, r *dns.Msg) {
 			err := dns.TsigVerify(pack, secret, "", false)
 			if err != nil {
 				logger.Error("TSIG VERIFICATION FAILED " + err.Error())
+				sendNotAuth(w, r)
+				return
 			} else {
-				logger.Error("TSIG VERIFICATION SUCCEDEED")
+				logger.Info("TSIG VERIFICATION SUCCEDEED")
 			}
-			responseRecords = append(responseRecords, &dns.TXT{
-				Hdr: dns.RR_Header{Name: ".", Rrtype: dns.TypeTXT, Class: dns.ClassINET, Ttl: 0},
-				Txt: []string{"- TSIG PRESENT -"},
-			})
+			// responseRecords = append(responseRecords, &dns.TXT{
+			//	Hdr: dns.RR_Header{Name: ".", Rrtype: dns.TypeTXT, Class: dns.ClassINET, Ttl: 0},
+			//	Txt: []string{"- TSIG PRESENT -"},
+			// })
+		} else {
+			sendNotAuth(w, r)
+			return
 		}
 		for _, ns := range r.Ns {
 			err := checkZone(&z, ns.Header().Name)
@@ -81,12 +88,21 @@ func handle(w dns.ResponseWriter, r *dns.Msg) {
 				sendNxDomain(w, r)
 				return
 			}
-			err = operations.HandleUpdate(ns, z)
+			err = operations.HandleUpdate(ns, &z)
 			if err != nil {
 				sendRefused(w, r)
 				return
 			}
 		}
+		if repository.Put(z.Origin(), z.String()) {
+			logger.Info("zone updated in repository")
+			logger.Debug(z.String(), "final zone")
+		} else {
+			logger.Error("error updating zone in repository")
+		}
+		sendSuccess(w, r, []dns.RR{})
+		return
+
 	default:
 		sendNotImplemented(w, r)
 		return

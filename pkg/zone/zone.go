@@ -19,6 +19,7 @@ func NewZone(text, origin string) *Zone {
 	z.text = text
 	z.origin = origin
 	z.updateRecords()
+	logger.Debug(z.String(), "Created zone (NewZone): "+origin)
 	return z
 }
 
