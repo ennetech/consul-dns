@@ -1,8 +1,8 @@
 package dns
 
 import (
-	"github.com/miekg/dns"
 	"github.com/ennetech/consul-dns/pkg/logger"
+	"github.com/miekg/dns"
 )
 
 func serveInterface(net string, port string) {

@@ -26,8 +26,8 @@ func TestRemoveLines(t *testing.T) {
 
 	computed := RemoveLines(original, 8, 8)
 
-	if (computed != expected) {
-		t.Error("Computed is different from expected",computed)
+	if computed != expected {
+		t.Error("Computed is different from expected", computed)
 	}
 
 }
@@ -58,8 +58,8 @@ HELLO
 
 	computed := InsertLine(original, 6, "HELLO")
 
-	if (computed != expected) {
-		t.Error("Computed is different from expected",computed)
+	if computed != expected {
+		t.Error("Computed is different from expected", computed)
 	}
 
 }

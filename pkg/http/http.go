@@ -1,17 +1,17 @@
 package http
 
 import (
-	"fmt"
-	"net/http"
-	"github.com/ennetech/consul-dns/pkg/config"
 	"crypto/hmac"
 	"crypto/md5"
+	"crypto/sha1"
+	"crypto/sha256"
 	"crypto/sha512"
 	"encoding/base64"
-	"time"
+	"fmt"
+	"github.com/ennetech/consul-dns/pkg/config"
 	"math/rand"
-	"crypto/sha256"
-	"crypto/sha1"
+	"net/http"
+	"time"
 )
 
 func Init(config config.ConsulDnsConfig) {
@@ -22,7 +22,7 @@ func Init(config config.ConsulDnsConfig) {
 func handler(w http.ResponseWriter, r *http.Request) {
 	// GENERATE TSIG KEYS
 	generatingSecret := randStringWithCharset(32, "abcdefghijklmnopqrstuvwxyz")
-	res := "Hello from consul-dns, here's some random TSIG encryption keys: (SECRET: "+generatingSecret+")<br>"
+	res := "Hello from consul-dns, here's some random TSIG encryption keys: (SECRET: " + generatingSecret + ")<br>"
 
 	// hmac-md5
 	hmacmd5 := hmac.New(md5.New, []byte(generatingSecret))

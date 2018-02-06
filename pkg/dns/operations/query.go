@@ -1,8 +1,8 @@
 package operations
 
 import (
-	"github.com/miekg/dns"
 	"github.com/ennetech/consul-dns/pkg/zone"
+	"github.com/miekg/dns"
 )
 
 // Only one query must be handled by this file, the convenient solution is to

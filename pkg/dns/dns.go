@@ -1,13 +1,13 @@
 package dns
 
 import (
-	"github.com/miekg/dns"
-	"github.com/ennetech/consul-dns/pkg/logger"
 	"github.com/ennetech/consul-dns/pkg/config"
-	"github.com/ennetech/consul-dns/pkg/zone"
 	"github.com/ennetech/consul-dns/pkg/dns/operations"
-	"strings"
 	"github.com/ennetech/consul-dns/pkg/dns/request"
+	"github.com/ennetech/consul-dns/pkg/logger"
+	"github.com/ennetech/consul-dns/pkg/zone"
+	"github.com/miekg/dns"
+	"strings"
 )
 
 // Repository used for storage
@@ -60,12 +60,12 @@ func handle(w dns.ResponseWriter, r *dns.Msg) {
 		}
 	case dns.OpcodeUpdate:
 		tsig := r.IsTsig()
-		if (tsig != nil) {
+		if tsig != nil {
 			logger.Info("UPDATE HAS TSIG ")
 			secret := conf.SystemConfig.TsigKey
 			pack, _ := r.Pack()
 			err := dns.TsigVerify(pack, secret, "", false)
-			if (err != nil) {
+			if err != nil {
 				logger.Error("TSIG VERIFICATION FAILED " + err.Error())
 			} else {
 				logger.Error("TSIG VERIFICATION SUCCEDEED")

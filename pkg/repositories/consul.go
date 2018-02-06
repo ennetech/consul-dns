@@ -1,10 +1,10 @@
 package repositories
 
 import (
+	"errors"
+	"github.com/ennetech/consul-dns/pkg/config"
 	"github.com/ennetech/consul-dns/pkg/zone"
 	"github.com/hashicorp/consul/api"
-	"github.com/ennetech/consul-dns/pkg/config"
-	"errors"
 )
 
 type ConsulRepository struct {
@@ -27,7 +27,7 @@ func (r ConsulRepository) Put(name, zone string) bool {
 
 var consulClient *api.Client
 
-func SetConsulClient(config config.ConsulConfig){
+func SetConsulClient(config config.ConsulConfig) {
 	consulClient, _ = api.NewClient(&api.Config{
 		Address: config.HttpAddress,
 		Token:   config.AuthToken,

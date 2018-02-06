@@ -1,9 +1,9 @@
 package dns
 
 import (
-	"strings"
-	"github.com/ennetech/consul-dns/pkg/zone"
 	"errors"
+	"github.com/ennetech/consul-dns/pkg/zone"
+	"strings"
 )
 
 func generateChain(txt string) []string {

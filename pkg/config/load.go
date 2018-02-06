@@ -1,12 +1,12 @@
 package config
 
 import (
+	"encoding/json"
 	"os"
 	"path"
-	"encoding/json"
 
-	"github.com/ennetech/consul-dns/pkg/logger"
 	"github.com/ennetech/consul-dns/pkg/common"
+	"github.com/ennetech/consul-dns/pkg/logger"
 )
 
 func LoadConfiguration(configPath string) (conf ConsulDnsConfig, err error) {

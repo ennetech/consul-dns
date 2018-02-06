@@ -8,8 +8,8 @@ import (
 	"syscall"
 
 	"github.com/ennetech/consul-dns/pkg/config"
-	"github.com/ennetech/consul-dns/pkg/http"
 	"github.com/ennetech/consul-dns/pkg/dns"
+	"github.com/ennetech/consul-dns/pkg/http"
 	"github.com/ennetech/consul-dns/pkg/repositories"
 )
 
@@ -25,7 +25,7 @@ func main() {
 
 	// Load the configuration
 	consulDnsConfig, err := config.LoadConfiguration(*configPath)
-	if (err != nil) {
+	if err != nil {
 		logger.Warn("Failed to load the configuration: " + err.Error())
 	}
 

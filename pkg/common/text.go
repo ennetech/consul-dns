@@ -18,7 +18,7 @@ func RemoveLines(text string, start int, end int) (temp string) {
 func InsertLine(text string, index int, iLine string) (temp string) {
 	splitted := strings.Split(text, "\n")
 	for lineNo, line := range splitted {
-		if (lineNo == (index-1)) {
+		if lineNo == (index - 1) {
 			temp += iLine + "\n" + line
 		} else {
 			temp += line

@@ -1,11 +1,11 @@
 package zone
 
 import (
+	"github.com/ennetech/consul-dns/pkg/common"
+	"github.com/ennetech/consul-dns/pkg/logger"
+	"github.com/miekg/dns"
 	"sort"
 	"strings"
-	"github.com/miekg/dns"
-	"github.com/ennetech/consul-dns/pkg/logger"
-	"github.com/ennetech/consul-dns/pkg/common"
 )
 
 type Zone struct {

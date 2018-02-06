@@ -1,9 +1,9 @@
 package zone
 
 import (
-	"strings"
 	"fmt"
 	"regexp"
+	"strings"
 )
 
 // Leaving this here as a base for zone parsing/formatting

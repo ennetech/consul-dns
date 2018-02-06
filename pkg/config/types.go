@@ -7,9 +7,9 @@ type ConsulConfig struct {
 }
 
 type SystemConfig struct {
-	DnsPort string
+	DnsPort  string
 	HttpPort string
-	TsigKey string
+	TsigKey  string
 }
 
 type ConsulDnsConfig struct {
