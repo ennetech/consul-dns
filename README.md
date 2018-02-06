@@ -54,6 +54,8 @@ Example config:
 
 You can also use env variables, look in the config package
 
+6. Add your bind zone files under a "dns" folder in consul KV, remember to name the sub-keys in fqdn format (eg.: with the dot at the end)
+
 ## Modules description
 ### QUERY (3 scenarios)
 1. The tld is .consul
