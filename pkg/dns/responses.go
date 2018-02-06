@@ -20,6 +20,7 @@ func sendSuccess(w dns.ResponseWriter, r *dns.Msg, recordsAnswer []dns.RR) dns.M
 func sendNxDomain(w dns.ResponseWriter, r *dns.Msg) dns.Msg {
 	return sendMessage(w, r, []dns.RR{}, dns.RcodeNameError)
 }
+
 func sendNotImplemented(w dns.ResponseWriter, r *dns.Msg) dns.Msg {
 	return sendMessage(w, r, []dns.RR{}, dns.RcodeNotImplemented)
 }
