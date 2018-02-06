@@ -68,10 +68,17 @@ func handle(w dns.ResponseWriter, r *dns.Msg) {
 		updateMux.Lock()
 		tsig := r.IsTsig()
 		if tsig != nil {
-			logger.Info("UPDATE HAS TSIG ")
+
+			err := checkZone(&z, tsig.Hdr.Name)
+			if err != nil {
+				sendNxDomain(w, r)
+				return
+			}
+
+			logger.Info("UPDATE HAS TSIG FOR "+tsig.Hdr.Name)
 			secret := conf.SystemConfig.TsigKey
 			pack, _ := r.Pack()
-			err := dns.TsigVerify(pack, secret, "", false)
+			err = dns.TsigVerify(pack, secret, "", false)
 			if err != nil {
 				logger.Error("TSIG VERIFICATION FAILED " + err.Error())
 				sendNotAuth(w, r)
