@@ -84,8 +84,10 @@ func handle(w dns.ResponseWriter, r *dns.Msg) {
 			//	Txt: []string{"- TSIG PRESENT -"},
 			// })
 		} else {
-			sendNotAuth(w, r)
-			return
+			if conf.SystemConfig.TsigKey != "" {
+				sendNotAuth(w, r)
+				return
+			}
 		}
 		for _, ns := range r.Ns {
 			err := checkZone(&z, ns.Header().Name)

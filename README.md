@@ -47,7 +47,7 @@ Example config:
   "SystemConfig": {
     "DnsPort": "53",
     "HttpPort": "4367",
-    "TsigKey": "v41HAYWrgX88krtc7x/X1Q=="
+    "TsigKey": ""
   }
 }
 ```
