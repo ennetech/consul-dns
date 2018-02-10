@@ -54,13 +54,18 @@ func (zone *Zone) updateText() {
 func (zone *Zone) QueryRR(question dns.Question) []dns.RR {
 	var answerRecords []dns.RR
 
+	// Scanning al record in the zone
 	for _, rr := range zone.records {
+		// Basic comparison
 		namematch := rr.Header().Name == question.Name
-		typematch := rr.Header().Rrtype == question.Qtype
+		typematch := (rr.Header().Rrtype == question.Qtype) || (question.Qtype == dns.TypeA && rr.Header().Rrtype == dns.TypeCNAME)
 		// Perfect match
 		if namematch && typematch {
 			answerRecords = append(answerRecords, rr)
 			// Wildcard match
+			// The name does not match
+			// The scanned record starts with *
+			// I haven't found anything
 		} else if !namematch && strings.HasPrefix(rr.Header().Name, "*") && (len(answerRecords) == 0) {
 			// Remove first level on question
 			s := strings.Split(question.Name, ".")
@@ -73,9 +78,6 @@ func (zone *Zone) QueryRR(question dns.Question) []dns.RR {
 				rr.Header().Name = question.Name
 				answerRecords = append(answerRecords, rr)
 			}
-			// Cname
-		} else if question.Qtype == dns.TypeA && rr.Header().Rrtype == dns.TypeCNAME && question.Name == rr.Header().Name {
-			answerRecords = append(answerRecords, rr)
 		}
 	}
 	return answerRecords
