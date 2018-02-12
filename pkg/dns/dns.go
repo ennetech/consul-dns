@@ -40,6 +40,7 @@ func handle(w dns.ResponseWriter, r *dns.Msg) {
 	switch r.Opcode {
 	case dns.OpcodeQuery:
 		for _, q := range r.Question {
+			q.Name = strings.ToLower(q.Name)
 			if strings.HasSuffix(q.Name, ".consul.") {
 				rf, err := request.Forward(conf.ConsulConfig.DnsAddress, q.Name, q.Qtype)
 				if err == nil {
