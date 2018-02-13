@@ -76,16 +76,27 @@ func handle(w dns.ResponseWriter, r *dns.Msg) {
 				return
 			}
 
-			logger.Info("UPDATE HAS TSIG FOR "+tsig.Hdr.Name)
+			logger.Info("UPDATE HAS TSIG FOR " + tsig.Hdr.Name + " " + tsig.Algorithm)
+			// Due to some discrepancies we have to check both compressed pack and uncompressed
 			secret := conf.SystemConfig.TsigKey
-			pack, _ := r.Pack()
-			err = dns.TsigVerify(pack, secret, "", false)
-			if err != nil {
+			c := r.Copy()
+
+			c.Compress = true
+			compressPack, _ := c.Pack()
+
+			c.Compress = false
+			unCompressPack, _ := c.Pack()
+
+
+			errC := dns.TsigVerify(compressPack, secret, "", false)
+			errU := dns.TsigVerify(unCompressPack, secret, "", false)
+
+			if errU == nil || errC == nil {
+				logger.Info("TSIG VERIFICATION SUCCEDEED")
+			} else {
 				logger.Error("TSIG VERIFICATION FAILED " + err.Error())
 				sendNotAuth(w, r)
 				return
-			} else {
-				logger.Info("TSIG VERIFICATION SUCCEDEED")
 			}
 			// responseRecords = append(responseRecords, &dns.TXT{
 			//	Hdr: dns.RR_Header{Name: ".", Rrtype: dns.TypeTXT, Class: dns.ClassINET, Ttl: 0},
